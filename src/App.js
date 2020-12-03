@@ -1,27 +1,37 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import './App.css';
 
-const Button = (symbol) => {
+const operationList = [
+  '+',
+  '-',
+  '*',
+  '/'
+]
+
+const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+const Button = ({symbol}) => {
   return (
-    <div className="Button">
+    <div> 
       <b>{symbol}</b>
     </div>
   )
 }
 
+// To be called on 'enter' or '=' sign press
 const registerReducer = (state, action) => {
   switch(action.type) {
     case 'ADD':
       return (
         // This should work
-        action.payload.currentRegister + action.payload.tempRegister 
+        action.payload.currentRegister + action.payload.tempRegister
       );
     case 'SUBTRACT':
       return (
         action.payload.currentRegister - action.payload.tempRegister
       )
   }
-} 
+}
 
 function Display({currentRegister}) {
   return (
@@ -44,9 +54,11 @@ function Numbers() {
   return (
     <div className="Numbers">
       {
-        Array.from(Array(10), (e, i) => {
-          return Button(i)
-        })
+        numberList.map(number => 
+          <div className="Button">
+            <Button symbol={number} />
+          </div>
+        )
       }
     </div>
   )
@@ -54,8 +66,14 @@ function Numbers() {
 
 function Operations() {
   return (
-    <div className="Operations">
-
+    <div className="Operations">      
+      {
+        operationList.map(operation => 
+          <div className="Button">
+            <Button symbol={operation} />
+          </div>
+          )
+      }
     </div>
   )
 }
@@ -69,6 +87,10 @@ function App() {
       type: operation,
       payload: {currentRegister: currentRegister, tempRegister: tempRegister}
     });
+  }
+
+  const handleInput = event => {
+    setCurrentRegister(event.target.value);
   }
 
   return (
