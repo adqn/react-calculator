@@ -10,9 +10,9 @@ const operationList = [
 
 const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-const Button = ({symbol}) => {
+const Button = ({symbol, handleInput}) => {
   return (
-    <div> 
+    <div onClick={() => handleInput(symbol)}> 
       <b>{symbol}</b>
     </div>
   )
@@ -41,22 +41,13 @@ function Display({currentRegister}) {
   )
 }
 
-function Keypad() {
-  return (
-    <div className="Keypad">
-      <Numbers />
-      <Operations />
-    </div>
-  );
-}
-
-function Numbers() {
+function Numbers({handleInput}) {
   return (
     <div className="Numbers">
       {
         numberList.map(number => 
-          <div className="Button">
-            <Button symbol={number} />
+          <div className="Button" onClick={() => handleInput(number)}>
+            {number}
           </div>
         )
       }
@@ -79,7 +70,8 @@ function Operations() {
 }
 
 function App() {
-  const [currentRegister, setCurrentRegister] = useReducer(registerReducer, 0);
+  // const [currentRegister, setCurrentRegister] = useReducer(registerReducer, 0);
+  const [currentRegister, setCurrentRegister] = useState(0);
   const [tempRegister, setTempRegister] = useState(0);
 
   const handleOperation = (operation) => {
@@ -89,14 +81,17 @@ function App() {
     });
   }
 
-  const handleInput = event => {
-    setCurrentRegister(event.target.value);
+  const handleInput = symbol => {
+    setCurrentRegister(currentRegister.toString() + symbol.toString());
   }
 
   return (
     <div className="Calculator">
       <Display currentRegister={currentRegister} />
-      <Keypad />
+      <div className="Keypad">
+        <Numbers handleInput={handleInput}/>
+        <Operations />
+      </div>
     </div>
   );
 }
