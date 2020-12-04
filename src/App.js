@@ -47,12 +47,12 @@ function Numbers({handleInput}) {
   )
 }
 
-const Operations = handleOperation => {
+const Operations = ({handleOperation}) => {
   return (
     <div className="Operations">      
       {
         operationList.map(operation => 
-          <div className="Button" onClick={handleOperation(operation)}>
+          <div className="Button" onClick={() => handleOperation(operation)}>
             {operation}
           </div>
           )
@@ -62,6 +62,7 @@ const Operations = handleOperation => {
 }
 
 function App() {
+  const [display, setDisplay] = useState(0);
   // const [currentRegister, setCurrentRegister] = useReducer(registerReducer, 0);
   const [currentRegister, setCurrentRegister] = useState(0);
   const [tempRegister, setTempRegister] = useState(0);
@@ -79,7 +80,10 @@ function App() {
   }
 
   const handleInput = symbol => {
-    setCurrentRegister(currentRegister.toString() + symbol.toString());
+    const updatedDisplay = currentRegister.toString() + symbol.toString()
+    const updatedRegister = Number(currentRegister.toString() + symbol.toString())
+    setDisplay(updatedDisplay);
+    setCurrentRegister(updatedRegister);
   }
 
   return (
@@ -87,7 +91,7 @@ function App() {
       <Display currentRegister={currentRegister} />
       <div className="Keypad">
         <Numbers handleInput={handleInput}/>
-        <Operations />
+        <Operations handleOperation={handleOperation} />
       </div>
     </div>
   );
