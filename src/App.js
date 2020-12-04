@@ -47,12 +47,12 @@ function Numbers({handleInput}) {
   )
 }
 
-function Operations() {
+const Operations = handleOperation => {
   return (
     <div className="Operations">      
       {
         operationList.map(operation => 
-          <div className="Button">
+          <div className="Button" onClick={handleOperation(operation)}>
             {operation}
           </div>
           )
@@ -65,12 +65,17 @@ function App() {
   // const [currentRegister, setCurrentRegister] = useReducer(registerReducer, 0);
   const [currentRegister, setCurrentRegister] = useState(0);
   const [tempRegister, setTempRegister] = useState(0);
+  const [operationRegister, setOperationRegister] = useState(null);
 
   const handleOperation = (operation) => {
     setCurrentRegister({
       type: operation,
       payload: {currentRegister: currentRegister, tempRegister: tempRegister}
     });
+  }
+
+  const getOperation = operation => {
+    setOperationRegister(operation);
   }
 
   const handleInput = symbol => {
