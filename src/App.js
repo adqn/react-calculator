@@ -10,14 +10,6 @@ const operationList = [
 
 const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-const Button = ({symbol, handleInput}) => {
-  return (
-    <div onClick={() => handleInput(symbol)}> 
-      <b>{symbol}</b>
-    </div>
-  )
-}
-
 // To be called on 'enter' or '=' sign press
 const registerReducer = (state, action) => {
   switch(action.type) {
@@ -61,7 +53,7 @@ function Operations() {
       {
         operationList.map(operation => 
           <div className="Button">
-            <Button symbol={operation} />
+            {operation}
           </div>
           )
       }
