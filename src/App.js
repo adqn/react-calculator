@@ -25,10 +25,10 @@ const registerReducer = (state, action) => {
   }
 }
 
-function Display({currentRegister}) {
+function Display({display}) {
   return (
     <div className="Display">
-      {currentRegister}
+      {display}
     </div>
   )
 }
@@ -47,12 +47,7 @@ function Numbers({handleInput}) {
   )
 }
 
-const Operations = ({handleOperation, registerSwitch, setRegisterSwitch}) => {
-  const handleRegisterSwitch = (operation) => {
-    setRegisterSwitch(!registerSwitch);
-    handleOperation(operation);
-  }
-
+const Operations = ({handleOperation, handleRegisterSwitch}) => {
   return (
     <div className="Operations">      
       {
@@ -73,15 +68,16 @@ function App() {
   const [operationRegister, setOperationRegister] = useState(null);
   const [registerSwitch, setRegisterSwitch] = useState(false);
 
-  const handleOperation = (operation) => {
-    setCurrentRegister({
-      type: operation,
-      payload: {currentRegister: currentRegister, tempRegister: tempRegister}
-    });
-  }
+  // const handleOperation = (operation) => {
+  //   setCurrentRegister({
+  //     type: operation,
+  //     payload: {currentRegister: currentRegister, tempRegister: tempRegister}
+  //   });
+  // }
 
-  const handleRegisterSwitch = () => {
-    setRegisterSwitch(!registerSwitch)
+  const handleRegisterSwitch = (operation) => {
+    setRegisterSwitch(!registerSwitch);
+    // handleOperation(operation);
   }
 
   const getOperation = operation => {
@@ -100,7 +96,7 @@ function App() {
     let display;
     let register;
 
-    if (!registerSwitch) {
+    if (registerSwitch === false) {
       display = getUpdatedDisplay(symbol, currentRegister);
       register = getUpdatedRegister(symbol, currentRegister);
       setCurrentRegister(register)
@@ -119,13 +115,11 @@ function App() {
 
   return (
     <div className="Calculator">
-      <Display currentRegister={currentRegister} />
+      <Display display={display} />
       <div className="Keypad">
         <Numbers handleInput={handleInput}/>
         <Operations 
-                    handleOperation={handleOperation} 
-                    registerSwitch={registerSwitch}
-                    setRegisterSwitch={setRegisterSwitch}  
+                    handleRegisterSwitch={handleRegisterSwitch}  
                     />
       </div>
     </div>
