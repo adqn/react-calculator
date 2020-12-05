@@ -6,7 +6,8 @@ const operationList = [
   '-',
   '*',
   '/',
-  '='
+  '=',
+  'C'
 ]
 
 const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
@@ -62,10 +63,10 @@ const Operations = ({handleRegisterSwitch}) => {
 }
 
 function App() {
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState("");
   const [answer, setAnswer] = useReducer(answerReducer, 0);
-  const [currentRegister, setCurrentRegister] = useState(0);
-  const [tempRegister, setTempRegister] = useState(0);
+  const [currentRegister, setCurrentRegister] = useState("");
+  const [tempRegister, setTempRegister] = useState("");
   const [operationRegister, setOperationRegister] = useState(null);
   const [registerSwitch, setRegisterSwitch] = useState(false);
 
@@ -82,15 +83,24 @@ function App() {
       setCurrentRegister(answer);
       setDisplay(answer);
       clearRegisters();
-    } else {
+    } 
+
+    if (operation === 'C') {
+      clearRegisters();
+      setRegisterSwitch(false);
+      setDisplay("");
+    }
+
+    else {
       setOperationRegister(operation);
       setRegisterSwitch(!registerSwitch);
     }
   }
 
   const clearRegisters = () => {
-    setCurrentRegister(0);
-    setTempRegister(0);
+    setCurrentRegister("");
+    setTempRegister("");
+    setOperationRegister(null);
   }
 
   const getUpdatedDisplay = (symbol, register) => {
