@@ -13,12 +13,12 @@ const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 // To be called on 'enter' or '=' sign press
 const registerReducer = (state, action) => {
   switch(action.type) {
-    case 'ADD':
+    case '+':
       return (
         // This should work
         action.payload.currentRegister + action.payload.tempRegister
       );
-    case 'SUBTRACT':
+    case '-':
       return (
         action.payload.currentRegister - action.payload.tempRegister
       )
@@ -47,16 +47,20 @@ function Numbers({handleInput}) {
   )
 }
 
-const Operations = ({handleOperation}) => {
+const Operations = ({handleOperation, registerSwitch, setRegisterSwitch}) => {
+  const handleRegisterSwitch = (operation) => {
+    setRegisterSwitch(!registerSwitch);
+    handleOperation(operation);
+  }
+
   return (
     <div className="Operations">      
       {
         operationList.map(operation => 
-          <div className="Button" onClick={() => handleOperation(operation)}>
-            {operation}
-          </div>
-          )
-      }
+            <div className="Button" onClick={() => handleRegisterSwitch(operation)}>
+              {operation}
+            </div>
+      )}
     </div>
   )
 }
@@ -67,6 +71,7 @@ function App() {
   const [currentRegister, setCurrentRegister] = useState(0);
   const [tempRegister, setTempRegister] = useState(0);
   const [operationRegister, setOperationRegister] = useState(null);
+  const [registerSwitch, setRegisterSwitch] = useState(false);
 
   const handleOperation = (operation) => {
     setCurrentRegister({
@@ -75,15 +80,41 @@ function App() {
     });
   }
 
+  const handleRegisterSwitch = () => {
+    setRegisterSwitch(!registerSwitch)
+  }
+
   const getOperation = operation => {
     setOperationRegister(operation);
   }
 
+  const getUpdatedDisplay = (symbol, register) => {
+    return register.toString() + symbol.toString();
+  }
+
+  const getUpdatedRegister = (symbol, register) => {
+    return Number(register.toString() + symbol.toString());
+  }
+
+  const setDisplayAndRegister = (symbol) => {
+    let display;
+    let register;
+
+    if (!registerSwitch) {
+      display = getUpdatedDisplay(symbol, currentRegister);
+      register = getUpdatedRegister(symbol, currentRegister);
+      setCurrentRegister(register)
+    } else {
+      display = getUpdatedDisplay(symbol, tempRegister);
+      register = getUpdatedRegister(symbol, tempRegister);
+      setTempRegister(register)
+    }
+
+    setDisplay(display)
+  }
+
   const handleInput = symbol => {
-    const updatedDisplay = currentRegister.toString() + symbol.toString()
-    const updatedRegister = Number(currentRegister.toString() + symbol.toString())
-    setDisplay(updatedDisplay);
-    setCurrentRegister(updatedRegister);
+    setDisplayAndRegister(symbol)
   }
 
   return (
@@ -91,7 +122,11 @@ function App() {
       <Display currentRegister={currentRegister} />
       <div className="Keypad">
         <Numbers handleInput={handleInput}/>
-        <Operations handleOperation={handleOperation} />
+        <Operations 
+                    handleOperation={handleOperation} 
+                    registerSwitch={registerSwitch}
+                    setRegisterSwitch={setRegisterSwitch}  
+                    />
       </div>
     </div>
   );
