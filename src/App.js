@@ -5,13 +5,14 @@ const operationList = [
   '+',
   '-',
   '*',
-  '/'
+  '/',
+  '='
 ]
 
 const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 // To be called on 'enter' or '=' sign press
-const registerReducer = (state, action) => {
+const answerReducer = (state, action) => {
   switch(action.type) {
     case '+':
       return (
@@ -47,7 +48,7 @@ function Numbers({handleInput}) {
   )
 }
 
-const Operations = ({handleOperation, handleRegisterSwitch}) => {
+const Operations = ({handleRegisterSwitch}) => {
   return (
     <div className="Operations">      
       {
@@ -62,26 +63,34 @@ const Operations = ({handleOperation, handleRegisterSwitch}) => {
 
 function App() {
   const [display, setDisplay] = useState(0);
-  // const [currentRegister, setCurrentRegister] = useReducer(registerReducer, 0);
+  const [answer, setAnswer] = useReducer(answerReducer, 0);
   const [currentRegister, setCurrentRegister] = useState(0);
   const [tempRegister, setTempRegister] = useState(0);
   const [operationRegister, setOperationRegister] = useState(null);
   const [registerSwitch, setRegisterSwitch] = useState(false);
 
-  // const handleOperation = (operation) => {
-  //   setCurrentRegister({
-  //     type: operation,
-  //     payload: {currentRegister: currentRegister, tempRegister: tempRegister}
-  //   });
-  // }
-
-  const handleRegisterSwitch = (operation) => {
-    setRegisterSwitch(!registerSwitch);
-    // handleOperation(operation);
+  const handleOperation = (operation) => {
+    setAnswer({
+      type: operation,
+      payload: {currentRegister: currentRegister, tempRegister: tempRegister}
+    });
   }
 
-  const getOperation = operation => {
-    setOperationRegister(operation);
+  const handleRegisterSwitch = (operation) => {
+    if (operation === '=') {
+      handleOperation(operationRegister);
+      setCurrentRegister(answer);
+      setDisplay(answer);
+      clearRegisters();
+    } else {
+      setOperationRegister(operation);
+      setRegisterSwitch(!registerSwitch);
+    }
+  }
+
+  const clearRegisters = () => {
+    setCurrentRegister(0);
+    setTempRegister(0);
   }
 
   const getUpdatedDisplay = (symbol, register) => {
