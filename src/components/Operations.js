@@ -1,5 +1,14 @@
 import React from 'react';
 
+const operationList = [
+  '+',
+  '-',
+  '*',
+  '/',
+  '=',
+  'C'
+]
+
 const Operations = ({handleRegisterSwitch}) => {
   return (
     <div className="Operations">      

@@ -1,49 +1,15 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import { calculateFromAtoms } from './components/calcHelpers';
 import Operations from './components/Operations';
+import Numbers from './components/Numbers';
+import Display from './components/Display';
 import './App.css';
-
-const operationList = [
-  '+',
-  '-',
-  '*',
-  '/',
-  '=',
-  'C'
-]
-
-const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-
-
-function Display({display}) {
-  return (
-    <div className="Display">
-      {display}
-    </div>
-  )
-}
-
-function Numbers({handleInput}) {
-  return (
-    <div className="Numbers">
-      {
-        numberList.map(number => 
-          <div className="Button" onClick={() => handleInput(number)}>
-            {number}
-          </div>
-        )
-      }
-    </div>
-  )
-}
-
 
 // To be called on 'enter' or '=' sign press
 const answerReducer = (state, action) => {
   switch(action.type) {
     case '+':
       return (
-        // This should work
         action.payload.currentRegister + action.payload.tempRegister
       );
     case '-':
@@ -66,6 +32,17 @@ const App = () => {
       type: operation,
       payload: {currentRegister: currentRegister, tempRegister: tempRegister}
     });
+  }
+
+  const composeAtom = () => {
+    let newAtom;
+
+    if (currentRegister) {
+      if (tempRegister) {
+        newAtom = [operationRegister, currentRegister, tempRegister];
+        setCurrentRegister(newAtom);
+      }
+    } 
   }
 
   const handleRegisterSwitch = (operation) => {
