@@ -62,11 +62,20 @@ const Operations = ({handleRegisterSwitch}) => {
   )
 }
 
-function App() {
-  const [display, setDisplay] = useState("");
+const calculateFromAtoms = atom => {
+  if (typeof (atom[1]) === 'number') {
+    const result = calculate(atom[0], atom[1], atom[2]);
+    return result;
+  } else {
+    return calculate(atom[0], calculateFromAtoms(atom[1]), atom[2]);
+  }
+}
+
+const App = () => {
+  const [display, setDisplay] = useState(null);
   const [answer, setAnswer] = useReducer(answerReducer, 0);
-  const [currentRegister, setCurrentRegister] = useState("");
-  const [tempRegister, setTempRegister] = useState("");
+  const [currentRegister, setCurrentRegister] = useState(null);
+  const [tempRegister, setTempRegister] = useState(null);
   const [operationRegister, setOperationRegister] = useState(null);
   const [registerSwitch, setRegisterSwitch] = useState(false);
 
@@ -104,11 +113,19 @@ function App() {
   }
 
   const getUpdatedDisplay = (symbol, register) => {
-    return register.toString() + symbol.toString();
+    let updatedDisplay;
+    register ? 
+      updatedDisplay =  register.toString() + symbol.toString() :
+      updatedDisplay = symbol.toString();
+    return updatedDisplay;
   }
 
   const getUpdatedRegister = (symbol, register) => {
-    return Number(register.toString() + symbol.toString());
+    let updatedRegister;
+    register ?
+      updatedRegister =  Number(register.toString() + symbol.toString()) :
+      updatedRegister =  Number(symbol.toString())
+    return updatedRegister;
   }
 
   const setDisplayAndRegister = (symbol) => {

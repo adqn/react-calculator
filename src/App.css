@@ -21,7 +21,8 @@
 } */
 
 .Keypad {
-  display: inline-grid;
+  display: grid;
+  grid-template-columns: 70% 30%;
 }
 
 /* .Numbers {
