@@ -37,17 +37,17 @@ const App = () => {
   const composeAtom = () => {
     let newAtom;
 
-    if (currentRegister) {
-      if (tempRegister) {
-        newAtom = [operationRegister, currentRegister, tempRegister];
-        setCurrentRegister(newAtom);
-      }
-    } 
+    if (tempRegister) {
+      newAtom = [operationRegister, currentRegister, tempRegister];
+      setCurrentRegister(newAtom);
+    }
   }
 
   const handleRegisterSwitch = (operation) => {
     if (operation === '=') {
-      handleOperation(operationRegister);
+      // handleOperation(operationRegister);
+      composeAtom();
+      calculateFromAtoms(currentRegister)
       setCurrentRegister(answer);
       setDisplay(answer);
       clearRegisters('all');
@@ -64,7 +64,6 @@ const App = () => {
       setRegisterSwitch(!registerSwitch);
     }
   }
-
 
   const clearRegisters = flag => {
     setTempRegister(null);
@@ -97,8 +96,14 @@ const App = () => {
 
     if (registerSwitch === false) {
       display = getUpdatedDisplay(symbol, currentRegister);
+      
+      if (currentRegister) {
+        composeAtom();
+      } else {
       register = getUpdatedRegister(symbol, currentRegister);
-      setCurrentRegister(register)
+      setCurrentRegister(register);
+      }
+
     } else {
       display = getUpdatedDisplay(symbol, tempRegister);
       register = getUpdatedRegister(symbol, tempRegister);
