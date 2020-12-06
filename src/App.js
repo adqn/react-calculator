@@ -62,6 +62,25 @@ const Operations = ({handleRegisterSwitch}) => {
   )
 }
 
+const calculate = (operation, x, y) => {
+  switch (operation) {
+    case '+':
+      return x + y;
+
+    case '-':
+      return x - y;
+
+    case '*':
+      return x * y;
+
+    case '/':
+      return x / y;
+
+    case '^':
+      return x ** y;
+  }
+}
+
 const calculateFromAtoms = atom => {
   if (typeof (atom[1]) === 'number') {
     const result = calculate(atom[0], atom[1], atom[2]);
