@@ -63,25 +63,6 @@ const Operations = ({handleRegisterSwitch}) => {
   )
 }
 
-const calculate = (operation, x, y) => {
-  switch (operation) {
-    case '+':
-      return x + y;
-
-    case '-':
-      return x - y;
-
-    case '*':
-      return x * y;
-
-    case '/':
-      return x / y;
-
-    case '^':
-      return x ** y;
-  }
-}
-
 const App = () => {
   const [display, setDisplay] = useState(null);
   const [answer, setAnswer] = useReducer(answerReducer, 0);
