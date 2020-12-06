@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import { calculateFromAtoms } from './components/calcHelpers';
+import Operations from './components/Operations';
 import './App.css';
 
 const operationList = [
@@ -13,20 +14,6 @@ const operationList = [
 
 const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-// To be called on 'enter' or '=' sign press
-const answerReducer = (state, action) => {
-  switch(action.type) {
-    case '+':
-      return (
-        // This should work
-        action.payload.currentRegister + action.payload.tempRegister
-      );
-    case '-':
-      return (
-        action.payload.currentRegister - action.payload.tempRegister
-      )
-  }
-}
 
 function Display({display}) {
   return (
@@ -50,17 +37,20 @@ function Numbers({handleInput}) {
   )
 }
 
-const Operations = ({handleRegisterSwitch}) => {
-  return (
-    <div className="Operations">      
-      {
-        operationList.map(operation => 
-            <div className="Button" onClick={() => handleRegisterSwitch(operation)}>
-              {operation}
-            </div>
-      )}
-    </div>
-  )
+
+// To be called on 'enter' or '=' sign press
+const answerReducer = (state, action) => {
+  switch(action.type) {
+    case '+':
+      return (
+        // This should work
+        action.payload.currentRegister + action.payload.tempRegister
+      );
+    case '-':
+      return (
+        action.payload.currentRegister - action.payload.tempRegister
+      )
+  }
 }
 
 const App = () => {
