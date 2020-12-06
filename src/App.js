@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useReducer} from 'react';
+import { calculateFromAtoms } from './components/calcHelpers';
 import './App.css';
 
 const operationList = [
@@ -81,15 +82,6 @@ const calculate = (operation, x, y) => {
   }
 }
 
-const calculateFromAtoms = atom => {
-  if (typeof (atom[1]) === 'number') {
-    const result = calculate(atom[0], atom[1], atom[2]);
-    return result;
-  } else {
-    return calculate(atom[0], calculateFromAtoms(atom[1]), atom[2]);
-  }
-}
-
 const App = () => {
   const [display, setDisplay] = useState(null);
   const [answer, setAnswer] = useReducer(answerReducer, 0);
@@ -110,10 +102,10 @@ const App = () => {
       handleOperation(operationRegister);
       setCurrentRegister(answer);
       setDisplay(answer);
-      clearRegisters();
+      clearRegisters('all');
     } 
 
-    if (operation === 'C') {
+    if (operation === 'all') {
       clearRegisters();
       setRegisterSwitch(false);
       setDisplay("");
@@ -125,10 +117,14 @@ const App = () => {
     }
   }
 
-  const clearRegisters = () => {
-    setCurrentRegister("");
-    setTempRegister("");
+
+  const clearRegisters = flag => {
+    setTempRegister(null);
     setOperationRegister(null);
+
+    if (flag === 'all') {
+      setCurrentRegister(null);
+    }
   }
 
   const getUpdatedDisplay = (symbol, register) => {
