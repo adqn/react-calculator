@@ -5,41 +5,18 @@ import Numbers from './components/Numbers';
 import Display from './components/Display';
 import './App.css';
 
-// To be called on 'enter' or '=' sign press
-const answerReducer = (state, action) => {
-  switch(action.type) {
-    case '+':
-      return (
-        action.payload.currentRegister + action.payload.tempRegister
-      );
-    case '-':
-      return (
-        action.payload.currentRegister - action.payload.tempRegister
-      )
-  }
-}
-
 const App = () => {
   const [display, setDisplay] = useState(null);
-  // const [answer, setAnswer] = useReducer(answerReducer, 0);
   const [currentRegister, setCurrentRegister] = useState(null);
   const [tempRegister, setTempRegister] = useState(null);
   const [operationRegister, setOperationRegister] = useState(null);
   const [registerSwitch, setRegisterSwitch] = useState(false);
-
-  // const handleOperation = (operation) => {
-  //   setAnswer({
-  //     type: operation,
-  //     payload: {currentRegister: currentRegister, tempRegister: tempRegister}
-  //   });
-  // }
 
   const composeAtom = () => {
     let newAtom;
 
     if (tempRegister) {
       newAtom = [operationRegister, currentRegister, tempRegister];
-      // setCurrentRegister(newAtom);
       return newAtom;
     }
   }
