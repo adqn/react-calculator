@@ -72,9 +72,6 @@ const App = () => {
       updatedRegister =  Number(symbol.toString()); 
     }
 
-    // register ?
-    //   updatedRegister =  Number(symbol.toString()) :
-    //   updatedRegister =  Number(register.toString() + symbol.toString())
     return updatedRegister;
   }
 
@@ -87,10 +84,7 @@ const App = () => {
       register = getUpdatedRegister(symbol, currentRegister);
       
       if (currentRegister) {
-        // if (tempRegister) {
-        //   composeAtom();
-        //   // console.log(currentRegister);
-        // }
+        // ?????
       } else {
         setCurrentRegister(register);
       }
