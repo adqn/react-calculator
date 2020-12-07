@@ -21,53 +21,58 @@ const answerReducer = (state, action) => {
 
 const App = () => {
   const [display, setDisplay] = useState(null);
-  const [answer, setAnswer] = useReducer(answerReducer, 0);
+  // const [answer, setAnswer] = useReducer(answerReducer, 0);
   const [currentRegister, setCurrentRegister] = useState(null);
   const [tempRegister, setTempRegister] = useState(null);
   const [operationRegister, setOperationRegister] = useState(null);
   const [registerSwitch, setRegisterSwitch] = useState(false);
 
-  const handleOperation = (operation) => {
-    setAnswer({
-      type: operation,
-      payload: {currentRegister: currentRegister, tempRegister: tempRegister}
-    });
-  }
+  // const handleOperation = (operation) => {
+  //   setAnswer({
+  //     type: operation,
+  //     payload: {currentRegister: currentRegister, tempRegister: tempRegister}
+  //   });
+  // }
 
   const composeAtom = () => {
     let newAtom;
 
     if (tempRegister) {
       newAtom = [operationRegister, currentRegister, tempRegister];
-      setCurrentRegister(newAtom);
+      // setCurrentRegister(newAtom);
+      return newAtom;
     }
   }
 
   const handleRegisterSwitch = (operation) => {
     if (operation === '=') {
-      // handleOperation(operationRegister);
-      composeAtom();
-      calculateFromAtoms(currentRegister)
-      setCurrentRegister(answer);
-      setDisplay(answer);
-      clearRegisters('all');
+      if (currentRegister) {
+        const newAtom = composeAtom();
+        console.log(newAtom);
+        const answer = calculateFromAtoms(newAtom);
+        setCurrentRegister(answer);
+        setDisplay(answer);
+        clearRegisters('some');
+        setRegisterSwitch(false);
+      }
     } 
 
-    if (operation === 'all') {
-      clearRegisters();
-      setRegisterSwitch(false);
-      setDisplay("");
+    if (operation === 'C') {
+      clearRegisters('all');
+      setDisplay(null);
     }
 
     else {
       setOperationRegister(operation);
-      setRegisterSwitch(!registerSwitch);
     }
+
+    setRegisterSwitch(!registerSwitch);
   }
 
   const clearRegisters = flag => {
     setTempRegister(null);
     setOperationRegister(null);
+    setRegisterSwitch(false);
 
     if (flag === 'all') {
       setCurrentRegister(null);
@@ -84,24 +89,33 @@ const App = () => {
 
   const getUpdatedRegister = (symbol, register) => {
     let updatedRegister;
-    register ?
-      updatedRegister =  Number(register.toString() + symbol.toString()) :
-      updatedRegister =  Number(symbol.toString())
+    if (register) {
+      updatedRegister =  Number(register.toString() + symbol.toString());
+    } else {
+      updatedRegister =  Number(symbol.toString()); 
+    }
+
+    // register ?
+    //   updatedRegister =  Number(symbol.toString()) :
+    //   updatedRegister =  Number(register.toString() + symbol.toString())
     return updatedRegister;
   }
 
-  const setDisplayAndRegister = (symbol) => {
+  const setDisplayAndRegisters = (symbol) => {
     let display;
     let register;
 
     if (registerSwitch === false) {
       display = getUpdatedDisplay(symbol, currentRegister);
+      register = getUpdatedRegister(symbol, currentRegister);
       
       if (currentRegister) {
-        composeAtom();
+        // if (tempRegister) {
+        //   composeAtom();
+        //   // console.log(currentRegister);
+        // }
       } else {
-      register = getUpdatedRegister(symbol, currentRegister);
-      setCurrentRegister(register);
+        setCurrentRegister(register);
       }
 
     } else {
@@ -114,7 +128,7 @@ const App = () => {
   }
 
   const handleInput = symbol => {
-    setDisplayAndRegister(symbol)
+    setDisplayAndRegisters(symbol)
   }
 
   return (
@@ -122,9 +136,7 @@ const App = () => {
       <Display display={display} />
       <div className="Keypad">
         <Numbers handleInput={handleInput}/>
-        <Operations 
-                    handleRegisterSwitch={handleRegisterSwitch}  
-                    />
+        <Operations handleRegisterSwitch={handleRegisterSwitch} />
       </div>
     </div>
   );

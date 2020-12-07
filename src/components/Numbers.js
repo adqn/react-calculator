@@ -2,7 +2,7 @@ import React from 'react';
 
 const numberList = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-function Numbers({handleInput}) {
+const Numbers = ({handleInput}) => {
   return (
     <div className="Numbers">
       {
