@@ -9,9 +9,11 @@ const App = () => {
   const [display, setDisplay] = useState(null);
   const [currentRegister, setCurrentRegister] = useState(null);
   const [tempRegister, setTempRegister] = useState(null);
+  const [thirdRegister, setThirdRegister] = useState(null);
   const [operationRegister, setOperationRegister] = useState(null);
   const [registerSwitch, setRegisterSwitch] = useState(false);
 
+  // factor out register states and move this to calcHelpers (?)
   const composeAtom = () => {
     let newAtom;
 
